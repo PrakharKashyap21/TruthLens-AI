@@ -20,7 +20,7 @@ import {
   NavDocIcon,
   NavAnalyticsIcon,
   NavClockIcon,
-  ChromeIcon,
+  PuzzleIcon,
   UserIcon,
   LogOutIcon,
   ShieldCheckIcon
@@ -415,11 +415,10 @@ function App() {
             type="button"
             className="nav-btn nav-extension-btn"
             onClick={() => setIsExtensionModalOpen(true)}
-            title="Install 1-Click Chrome Browser Extension"
+            title="TruthLens Browser Extension"
           >
-            <ChromeIcon size={14} style={{ color: "#38bdf8" }} />
+            <PuzzleIcon size={15} style={{ color: "#38bdf8" }} />
             <span>Extension</span>
-            <span className="nav-extension-badge">1-Click</span>
           </button>
 
           <button

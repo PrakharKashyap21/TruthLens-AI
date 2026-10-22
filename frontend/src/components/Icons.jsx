@@ -1150,7 +1150,7 @@ export const ChromeIcon = ({ size = 15, className = "" }) => (
   </svg>
 );
 
-export const PuzzleIcon = ({ size = 15, className = "" }) => (
+export const PuzzleIcon = ({ size = 15, className = "", style = {} }) => (
   <svg
     width={size}
     height={size}
@@ -1161,13 +1161,13 @@ export const PuzzleIcon = ({ size = 15, className = "" }) => (
     strokeLinecap="round"
     strokeLinejoin="round"
     className={className}
-    style={{ display: "inline-block", verticalAlign: "middle" }}
+    style={{ display: "inline-block", verticalAlign: "middle", ...style }}
   >
-    <path d="M14 2v4a2 2 0 0 0 2 2h4v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8z" />
-    <path d="M14 2v6h6" />
-    <path d="M9 15h6" />
+    <path d="M4 7h3a1 1 0 0 0 1-1v-1a2 2 0 0 1 4 0v1a1 1 0 0 0 1 1h3a1 1 0 0 1 1 1v3a1 1 0 0 0 1 1h1a2 2 0 0 1 0 4h-1a1 1 0 0 0-1 1v3a1 1 0 0 1-1 1h-3a1 1 0 0 1-1-1v-1a2 2 0 0 0-4 0v1a1 1 0 0 1-1 1h-3a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a2 2 0 0 0 0-4h-1a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1" />
   </svg>
 );
+
+export const ExtensionIcon = PuzzleIcon;
 
 export const XIcon = ({ size = 15, className = "" }) => (
   <svg
