@@ -139,7 +139,7 @@ function App() {
     setActiveQuery({ title: title || "", text: text || "" });
 
     try {
-      const data = await verifyNewsV2(title, text, language);
+      const data = await verifyNewsV2(title, text, language, false, sourceUrl);
       setVerificationResult(data);
 
       const newItem = {
@@ -513,7 +513,7 @@ function App() {
               onVerifyStory={(story) => {
                 switchTab("verify");
                 setVerifyModality("search");
-                handleVerify({ title: story.title, text: story.text });
+                handleVerify({ title: story.title, text: story.text, sourceUrl: story.sourceUrl });
               }}
             />
           ) : activeTab === "analytics" ? (

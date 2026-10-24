@@ -98,6 +98,7 @@ class VerificationRequest(BaseModel):
     include_linguistic_signal: Optional[bool] = True
     language: Optional[str] = "auto"
     target_language: Optional[str] = None
+    source_url: Optional[str] = None
 
     @model_validator(mode="after")
     def validate_content_present(self) -> "VerificationRequest":
@@ -182,6 +183,8 @@ class VerificationResponse(BaseModel):
     vernacular_summary: Optional[str] = None
     vernacular_overall_verdict: Optional[str] = None
     available_translations: List[str] = Field(default_factory=lambda: ["en"])
+    is_developing_story: bool = False
+    developing_story_note: Optional[str] = None
 
 
 class ClaimVerificationResult(BaseModel):

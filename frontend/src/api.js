@@ -51,19 +51,23 @@ export const predictNews = async (title, text) => {
   }
 };
 
-export const verifyNewsV2 = async (title, text, language = "auto", isRetry = false) => {
+export const verifyNewsV2 = async (title, text, language = "auto", isRetry = false, sourceUrl = "") => {
   try {
-    const response = await apiClient.post("/v2/verify", {
+    const payload = {
       title: title || "",
       text: text || "",
       language: language || "auto",
-    });
+    };
+    if (sourceUrl) {
+      payload.source_url = sourceUrl;
+    }
+    const response = await apiClient.post("/v2/verify", payload);
     return response.data;
   } catch (error) {
     // Auto-retry once if timeout or connection drop occurred (server was waking up)
     if (!isRetry && (error.code === "ECONNABORTED" || error.message?.includes("timeout") || !error.response)) {
       console.warn("Server cold start or network delay detected. Retrying verification automatically...");
-      return await verifyNewsV2(title, text, language, true);
+      return await verifyNewsV2(title, text, language, true, sourceUrl);
     }
     if (error.response) {
       if (error.response.status === 422) {

@@ -10,7 +10,8 @@ import {
   DownloadIcon,
   GlobeIcon,
   NewspaperIcon,
-  SparklesIcon
+  SparklesIcon,
+  ZapIcon
 } from "./Icons";
 
 const V2VerificationResult = ({ result }) => {
@@ -26,7 +27,9 @@ const V2VerificationResult = ({ result }) => {
     detected_language = "en",
     language_name = "English",
     vernacular_summary,
-    vernacular_overall_verdict
+    vernacular_overall_verdict,
+    is_developing_story = false,
+    developing_story_note
   } = result;
 
   const isVernacular = detected_language && detected_language !== "en";
@@ -51,7 +54,7 @@ const V2VerificationResult = ({ result }) => {
         return "verdict-misleading";
       case "UNVERIFIED":
       default:
-        return "verdict-unverified";
+        return is_developing_story ? "verdict-unverified verdict-developing" : "verdict-unverified";
     }
   };
 
@@ -224,6 +227,11 @@ ${(claims || []).flatMap((c) => c.evidence || []).map((e) => `- ${e.publisher}: 
           <div className="hero-verdict-badge-group">
             <span className="verdict-emoji">{getVerdictIcon(overall_assessment)}</span>
             <span className="hero-verdict-title">{activeOverallVerdict}</span>
+            {is_developing_story && (
+              <span className="developing-story-pill">
+                <span className="developing-pulse-dot" /> Developing Story • Live News Active
+              </span>
+            )}
           </div>
 
           <div className="hero-verdict-actions">
@@ -265,6 +273,12 @@ ${(claims || []).flatMap((c) => c.evidence || []).map((e) => `- ${e.publisher}: 
           <div className="verdict-guide-box">
             <strong>Analysis Context:</strong> {getVerdictDescription(overall_assessment)}
           </div>
+          {is_developing_story && developing_story_note && (
+            <div className="developing-story-box">
+              <span className="developing-story-box-icon"><ZapIcon size={14} style={{ color: "#38bdf8" }} /></span>
+              <span><strong>Live News Wire Update:</strong> {developing_story_note}</span>
+            </div>
+          )}
           {has_conflict && (
             <div className="conflict-alert-badge" style={{ display: "inline-flex", alignItems: "center", gap: "4px" }}>
               <AlertTriangleIcon size={14} style={{ color: "#f59e0b" }} /> Conflicting reports found across different publishers

@@ -267,6 +267,7 @@ export default function RadarView({ onVerifyStory }) {
       onVerifyStory({
         title: item.title,
         text: item.prefilled_query || item.summary,
+        sourceUrl: item.link || "",
       });
     }
   };

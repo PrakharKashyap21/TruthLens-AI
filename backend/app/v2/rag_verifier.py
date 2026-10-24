@@ -434,7 +434,7 @@ Return ONLY the 2 queries separated by a newline, with no extra text or numberin
 
         return results[:max_results]
 
-    def verify_claim(self, claim_text: str, claim_id: str = "c1", language_hint: Optional[str] = "auto") -> Dict[str, Any]:
+    def verify_claim(self, claim_text: str, claim_id: str = "c1", language_hint: Optional[str] = "auto", seed_url: Optional[str] = None) -> Dict[str, Any]:
         """Verify a single claim against live web evidence and Gemini reasoning with vernacular support."""
         # Step 0: Language & script detection
         lang_code, lang_name = self._detect_language(claim_text, language_hint)
@@ -444,6 +444,24 @@ Return ONLY the 2 queries separated by a newline, with no extra text or numberin
         
         # Step 2: Fetch article text context in parallel (max 3s)
         evidence_docs = self._fetch_all_docs_concurrently(search_results)
+
+        # Step 2b: If a seed source URL was provided (e.g. from Radar card), ingest and prepend it as primary evidence
+        if seed_url and seed_url.startswith("http"):
+            try:
+                seed_body = self._extract_article_content(seed_url, "")
+                pub, dom = self._get_publisher_and_domain(seed_url)
+                seed_doc = {
+                    "title": f"Source Wire Report ({pub})",
+                    "url": seed_url,
+                    "publisher": pub,
+                    "domain": dom,
+                    "snippet": seed_body[:300] if seed_body else "Direct breaking news wire article provided via Radar stream.",
+                    "content": seed_body or "Direct breaking news wire article provided via Radar stream."
+                }
+                # Prepend seed doc as primary source [1] and keep top external cross-sources
+                evidence_docs = [seed_doc] + [d for d in evidence_docs if d.get("url") != seed_url][:3]
+            except Exception as e:
+                logger.debug("Failed to ingest seed_url %s: %s", seed_url, e)
 
         # If no client or no key, return heuristic fallback
         if not self.client:
@@ -484,6 +502,7 @@ INSTRUCTIONS:
    - "CONTRADICTED": The claim is proven false, fabricated, debunked, or factually inaccurate by credible reporting.
    - "MISLEADING": The claim mixes truth with falsehoods, distorts context, or exaggerates numbers.
    - "UNVERIFIED": Insufficient or no reliable evidence found to independently confirm or debunk the claim.
+   * BREAKING & DEVELOPING STORIES: If credible mainstream news reports confirm the overarching event (such as police inquiries, major accidents, policy decisions, summits), but secondary forensic or micro-details (e.g. exact recovery counts, transit routes) are still emerging, confirm the main event and note that granular specifics are currently developing across live reporting.
 2. Assign a confidence score (0.0 to 1.0).
 3. Write a clear, objective 2-3 sentence explanation in English summarizing the verdict and why.
 4. Provide 2-3 key findings in English.
@@ -753,17 +772,24 @@ Return strictly a valid JSON object matching this schema:
         text = (request.text or "").strip()
         full_text = f"{title}. {text}".strip() if title and text else (title or text)
         req_lang = request.language or "auto"
+        seed_url = (request.source_url or "").strip()
 
-        # Prioritize the most substantive factual claim for high precision and fast turnaround
+        # Prioritize the most substantive factual claim:
+        # If title is provided, it represents the primary breaking news event/headline claim!
         claims_to_verify = []
-        if text and len(text) >= 15:
+        if title and len(title) >= 10:
+            claims_to_verify.append(title)
+            if text and len(text) >= 15 and text != title:
+                # Add secondary claim from body if available
+                sentences = [s.strip() for s in re.split(r'[.!?\n]+', text) if len(s.strip()) >= 15 and s.strip() != title]
+                if sentences:
+                    claims_to_verify.append(sentences[0])
+        elif text and len(text) >= 15:
             sentences = [s.strip() for s in re.split(r'[.!?\n]+', text) if len(s.strip()) >= 15]
             if sentences:
                 claims_to_verify.append(sentences[0])
             else:
                 claims_to_verify.append(text[:250])
-        elif title and len(title) >= 10:
-            claims_to_verify.append(title)
         else:
             claims_to_verify = [full_text[:200]]
 
@@ -772,7 +798,7 @@ Return strictly a valid JSON object matching this schema:
 
         for idx, claim_str in enumerate(claims_to_verify[:request.max_claims or 2]):
             cid = f"claim_{idx+1}"
-            res = self.verify_claim(claim_str, cid, language_hint=req_lang)
+            res = self.verify_claim(claim_str, cid, language_hint=req_lang, seed_url=seed_url if idx == 0 else None)
             
             # Evidence summary
             ev_items = res["evidence"]
@@ -821,6 +847,10 @@ Return strictly a valid JSON object matching this schema:
         has_con = any(v == ClaimVerdict.CONTRADICTED for v in verdicts)
         has_sup = any(v == ClaimVerdict.SUPPORTED for v in verdicts)
 
+        total_ev_count = sum(len(c.evidence) for c in claim_details) if claim_details else 0
+        is_dev_story = False
+        dev_note = None
+
         if has_con:
             overall = OverallAssessment.CONTRADICTED
             summary_msg = claim_details[0].reasoning
@@ -830,6 +860,13 @@ Return strictly a valid JSON object matching this schema:
         else:
             overall = OverallAssessment.UNVERIFIED
             summary_msg = claim_details[0].reasoning if claim_details else "Insufficient external evidence found."
+            # If multiple sources report on the story or general context, mark as active Developing Story
+            if total_ev_count >= 2:
+                is_dev_story = True
+                dev_note = (
+                    "Live coverage detected across mainstream news publications. "
+                    "The overarching incident is reported, while specific forensic or micro-details are actively developing."
+                )
 
         first_vinfo = claim_details[0].vernacular_info if claim_details else None
         detected_lang = first_vinfo.detected_language if first_vinfo else "en"
@@ -859,7 +896,9 @@ Return strictly a valid JSON object matching this schema:
             language_name=lang_name,
             vernacular_summary=vernacular_summary,
             vernacular_overall_verdict=vernacular_overall,
-            available_translations=translations
+            available_translations=translations,
+            is_developing_story=is_dev_story,
+            developing_story_note=dev_note
         )
 
     def _decompose_claims(self, title: str, content: str) -> List[str]:
