@@ -836,13 +836,36 @@ body {
   transform: translateY(0) scale(0.97);
 }
 
-/* Preset Chip Buttons (Multi-modal Document & Audio view parity) */
+/* Presets Container & Grid (Document Audit, URL input, and Sample Claims) */
+.presets-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.presets-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #94a3b8;
+  letter-spacing: 0.02em;
+}
+
+.presets-grid {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem; /* Clean, generous gap between all sample capsule buttons */
+}
+
 .preset-chip-btn {
   background: rgba(30, 41, 59, 0.7);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   color: var(--text-primary);
-  padding: 0.42rem 0.85rem;
-  border-radius: 20px;
+  padding: 0.45rem 0.95rem;
+  border-radius: 9999px;
   font-size: 0.82rem;
   font-weight: 500;
   cursor: pointer;
@@ -850,14 +873,16 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  line-height: 1;
+  line-height: 1.2;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
 .preset-chip-btn:hover:not(:disabled) {
-  background: rgba(56, 189, 248, 0.15);
-  border-color: rgba(56, 189, 248, 0.45);
+  background: rgba(56, 189, 248, 0.16);
+  border-color: rgba(56, 189, 248, 0.5);
   color: #ffffff;
   transform: translateY(-1px);
+  box-shadow: 0 3px 10px rgba(56, 189, 248, 0.2);
 }
 
 /* Omni Alert */
