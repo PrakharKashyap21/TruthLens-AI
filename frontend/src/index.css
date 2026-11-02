@@ -8891,3 +8891,217 @@ body {
   opacity: 0.6;
   cursor: not-allowed;
 }
+
+/* =========================================================================
+   EDITORIAL-MODERN HYBRID OPENING SPLASH
+   ========================================================================= */
+
+.splash-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 999999;
+  background-color: #070b12;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  cursor: pointer;
+  transition: opacity 0.32s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.32s cubic-bezier(0.16, 1, 0.3, 1),
+              visibility 0.32s;
+  will-change: opacity, transform;
+}
+
+.splash-overlay.splash-fade-out {
+  opacity: 0;
+  transform: scale(1.015);
+  pointer-events: none;
+  visibility: hidden;
+}
+
+/* Subtle, organic obsidian ambient halo (zero harsh neon) */
+.splash-ambient-halo {
+  position: absolute;
+  width: 480px;
+  height: 280px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(14, 165, 233, 0.08) 0%, rgba(99, 102, 241, 0.04) 45%, transparent 70%);
+  filter: blur(48px);
+  pointer-events: none;
+  animation: splashHaloPulse 1.2s ease-out forwards;
+}
+
+@keyframes splashHaloPulse {
+  0% {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0.85;
+    transform: scale(1.05);
+  }
+}
+
+.splash-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 1.5rem 2rem;
+  max-width: 520px;
+}
+
+/* Brand Row: Emblem + Wordmark */
+.splash-brand-row {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.85rem;
+  animation: splashBrandReveal 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes splashBrandReveal {
+  0% {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.splash-emblem-wrap {
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 2px 10px rgba(0, 242, 254, 0.28));
+  animation: splashEmblemIn 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes splashEmblemIn {
+  0% {
+    transform: scale(0.92);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.splash-emblem {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.splash-title-group {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.45rem;
+}
+
+/* The Editorial Hybrid Typography (Refined Serif with Modern Edge) */
+.splash-wordmark {
+  font-family: 'Newsreader', Georgia, Cambria, 'Times New Roman', serif;
+  font-size: 2.35rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: #f8fafc;
+  line-height: 1;
+}
+
+.splash-badge-ai {
+  font-family: var(--font-heading);
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  background: linear-gradient(135deg, #38bdf8 0%, #6366f1 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  padding: 0.12rem 0.42rem;
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  border-radius: 6px;
+  line-height: 1;
+  position: relative;
+  top: -2px;
+}
+
+/* Hairline Separator (Refined 0.5px line from center) */
+.splash-hairline {
+  width: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.16) 50%, transparent 100%);
+  margin: 1.1rem auto 0.95rem auto;
+  animation: splashHairlineExpand 0.65s 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes splashHairlineExpand {
+  0% {
+    width: 0;
+    opacity: 0;
+  }
+  100% {
+    width: 240px;
+    opacity: 1;
+  }
+}
+
+/* Editorial Subtitle */
+.splash-tagline {
+  font-family: var(--font-body);
+  font-size: 0.88rem;
+  font-weight: 400;
+  color: #94a3b8;
+  letter-spacing: 0.02em;
+  opacity: 0;
+  transform: translateY(3px);
+  animation: splashTaglineIn 0.55s 0.38s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes splashTaglineIn {
+  0% {
+    opacity: 0;
+    transform: translateY(3px);
+  }
+  100% {
+    opacity: 0.9;
+    transform: translateY(0);
+  }
+}
+
+.splash-dot {
+  color: #38bdf8;
+  font-weight: 700;
+}
+
+/* Subtle Skip Hint */
+.splash-skip-hint {
+  position: absolute;
+  bottom: 2rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #475569;
+  opacity: 0;
+  animation: splashSkipIn 0.4s 0.6s ease-out forwards;
+}
+
+@keyframes splashSkipIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0.5;
+  }
+}
+

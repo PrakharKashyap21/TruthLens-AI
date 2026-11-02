@@ -11,6 +11,7 @@ import AudioAuditView from "./components/AudioAuditView";
 import ChatbotBridgeView from "./components/ChatbotBridgeView";
 import ExtensionModal from "./components/ExtensionModal";
 import AuthModal from "./components/AuthModal";
+import SplashScreen from "./components/SplashScreen";
 import {
   NavVerifyIcon,
   NavRadarIcon,
@@ -343,6 +344,9 @@ function App() {
 
   return (
     <div className="app-layout">
+      {/* Editorial Opening Splash Intro */}
+      <SplashScreen />
+
       {/* Ambient Cosmic Aurora Glow */}
       <div className="ambient-background-glow" aria-hidden="true">
         <div className="glow-orb glow-orb-primary" />
