@@ -20,20 +20,21 @@ export default function SplashScreen({ onComplete }) {
     setIsVisible(true);
 
     // Sequence timing
-    // 0.0s - 0.9s: Reveal logo, wordmark, hairline, and tagline
-    // 0.95s: Start gentle fade out
+    // 0.0s - 0.5s: Reveal logo, wordmark, hairline, and tagline
+    // 0.5s - 1.85s: Comfortable reading window
+    // 1.85s: Start gentle fade out
     const fadeTimer = setTimeout(() => {
       setIsFadingOut(true);
-    }, 1050);
+    }, 1850);
 
-    // 1.35s: Fully unmount splash and hand over to app
+    // 2.2s: Fully unmount splash and hand over to app
     const finishTimer = setTimeout(() => {
       try {
         sessionStorage.setItem(SPLASH_STORAGE_KEY, "true");
       } catch (e) {}
       setIsVisible(false);
       if (onComplete) onComplete();
-    }, 1380);
+    }, 2200);
 
     // Allow user to instantly dismiss by clicking or hitting any key
     const handleDismiss = () => {
@@ -98,3 +99,4 @@ export default function SplashScreen({ onComplete }) {
     </div>
   );
 }
+

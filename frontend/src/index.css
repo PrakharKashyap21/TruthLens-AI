@@ -8954,8 +8954,8 @@ body {
   flex-direction: column;
   align-items: center;
   text-align: center;
-  padding: 1.5rem 2rem;
-  max-width: 520px;
+  padding: 2rem 2.5rem;
+  max-width: 640px;
 }
 
 /* Brand Row: Emblem + Wordmark */
@@ -8963,7 +8963,7 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.85rem;
+  gap: 1.15rem;
   animation: splashBrandReveal 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
@@ -8979,12 +8979,12 @@ body {
 }
 
 .splash-emblem-wrap {
-  width: 42px;
-  height: 42px;
+  width: 56px;
+  height: 56px;
   display: flex;
   align-items: center;
   justify-content: center;
-  filter: drop-shadow(0 2px 10px rgba(0, 242, 254, 0.28));
+  filter: drop-shadow(0 4px 16px rgba(0, 242, 254, 0.35));
   animation: splashEmblemIn 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
@@ -9006,42 +9006,42 @@ body {
 .splash-title-group {
   display: inline-flex;
   align-items: baseline;
-  gap: 0.45rem;
+  gap: 0.6rem;
 }
 
 /* The Editorial Hybrid Typography (Refined Serif with Modern Edge) */
 .splash-wordmark {
   font-family: 'Newsreader', Georgia, Cambria, 'Times New Roman', serif;
-  font-size: 2.35rem;
+  font-size: 3.25rem;
   font-weight: 500;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.025em;
   color: #f8fafc;
   line-height: 1;
 }
 
 .splash-badge-ai {
   font-family: var(--font-heading);
-  font-size: 0.78rem;
+  font-size: 0.95rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   background: linear-gradient(135deg, #38bdf8 0%, #6366f1 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  padding: 0.12rem 0.42rem;
-  border: 1px solid rgba(56, 189, 248, 0.35);
-  border-radius: 6px;
+  padding: 0.18rem 0.55rem;
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  border-radius: 7px;
   line-height: 1;
   position: relative;
-  top: -2px;
+  top: -4px;
 }
 
 /* Hairline Separator (Refined 0.5px line from center) */
 .splash-hairline {
   width: 0;
   height: 1px;
-  background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.16) 50%, transparent 100%);
-  margin: 1.1rem auto 0.95rem auto;
+  background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.18) 50%, transparent 100%);
+  margin: 1.35rem auto 1.15rem auto;
   animation: splashHairlineExpand 0.65s 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
@@ -9051,7 +9051,7 @@ body {
     opacity: 0;
   }
   100% {
-    width: 240px;
+    width: 320px;
     opacity: 1;
   }
 }
@@ -9059,10 +9059,10 @@ body {
 /* Editorial Subtitle */
 .splash-tagline {
   font-family: var(--font-body);
-  font-size: 0.88rem;
+  font-size: 1.08rem;
   font-weight: 400;
-  color: #94a3b8;
-  letter-spacing: 0.02em;
+  color: #cbd5e1;
+  letter-spacing: 0.015em;
   opacity: 0;
   transform: translateY(3px);
   animation: splashTaglineIn 0.55s 0.38s cubic-bezier(0.16, 1, 0.3, 1) forwards;
